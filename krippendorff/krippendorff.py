@@ -307,19 +307,12 @@ def alpha(reliability_data: npt.ArrayLike | None = None, value_counts: npt.Array
     if (reliability_data is None) == (value_counts is None):
         raise ValueError("Either reliability_data or value_counts must be provided, but not both.")
 
-    if (reliability_data is None) == (value_counts is None):
-    raise ValueError("Either reliability_data or value_counts must be provided, but not both.")
-
     if type(reliability_data).__name__ == "DataFrame":
         data = reliability_data.T.values.tolist()
         data_tuple = tuple(' '.join(map(str, row)) for row in data)
         reliability_data = [[round(-(1/float(val))+2, 4) if isinstance(val, (int, float)) and float(val) < 1 else round(float(val), 4)
                         if val != "*" and val != "N/A" else np.nan for val in coder.split()] for coder in data_tuple] 
         value_domain = list(set([val for sublist in reliability_data for val in sublist])).sort()
-    
-    # Don't know if it's a `list` or NumPy array. If it's the latter, the truth value is ambiguous. So, ask for `None`.
-    if value_counts is None:
-        reliability_data = np.asarray(reliability_data)
 
     # Don't know if it's a `list` or NumPy array. If it's the latter, the truth value is ambiguous. So, ask for `None`.
     if value_counts is None:
